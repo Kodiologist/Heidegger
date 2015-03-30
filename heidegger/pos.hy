@@ -37,5 +37,13 @@
 (def Pos.EAST (Pos 1 0))
 (def Pos.WEST (Pos -1 0))
 
-(def Pos.ORTHS [Pos.EAST Pos.NORTH Pos.WEST Pos.SOUTH])
-  ; Ordered the same way angles are in coordinate geometry.
+(def Pos.NE (+ Pos.NORTH Pos.EAST))
+(def Pos.NW (+ Pos.NORTH Pos.WEST))
+(def Pos.SE (+ Pos.SOUTH Pos.EAST))
+(def Pos.SW (+ Pos.SOUTH Pos.WEST))
+
+; In these tuples, directions are ordered the same way angles are
+; in coordinate geometry.
+(def Pos.ORTHS (, Pos.EAST Pos.NORTH Pos.WEST Pos.SOUTH))
+(def Pos.DIAGS (, Pos.NE Pos.NW Pos.SW Pos.SE))
+(def Pos.DIR8 (, Pos.EAST Pos.NE Pos.NORTH Pos.NW Pos.WEST Pos.SW Pos.SOUTH Pos.SE))
