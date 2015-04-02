@@ -8,7 +8,7 @@
     None)]
 
   [__eq__ (fn [self o]
-    (and (= self.x o.x) (= self.y o.y)))]
+    (and (is-not o None) (= self.x o.x) (= self.y o.y)))]
 
   [__hash__ (fn [self]
     (hash (, self.x self.y)))]
