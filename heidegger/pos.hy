@@ -42,6 +42,16 @@
 (def Pos.SE (+ Pos.SOUTH Pos.EAST))
 (def Pos.SW (+ Pos.SOUTH Pos.WEST))
 
+(def Pos.DIRNAMES {
+  Pos.NORTH "north"
+  Pos.SOUTH "south"
+  Pos.EAST "east"
+  Pos.WEST "west"
+  Pos.NE "northeast"
+  Pos.NW "northwest"
+  Pos.SE "southeast"
+  Pos.SW "southwest"})
+
 ; In these tuples, directions are ordered the same way angles are
 ; in coordinate geometry.
 (def Pos.ORTHS (, Pos.EAST Pos.NORTH Pos.WEST Pos.SOUTH))
