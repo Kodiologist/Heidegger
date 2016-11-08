@@ -1,4 +1,4 @@
-(require kodhy.macros)
+(require [kodhy.macros [lc amap filt afind-or]])
 
 (import
   [heidegger.pos [Pos]]
@@ -147,14 +147,13 @@
 
 (defclass Room [MapFeature] [
 
-  [__init__ (fn [self p1 p2 &optional door]
+  __init__ (fn [self p1 p2 &optional door]
     (set-self p1 p2)
     (setv self.doors [])
     (when door
-      (.append self.doors door))
-    None)]
+      (.append self.doors door)))
 
-  [create-random-at (classmethod (fn [self door dir room-width room-height]
+  create-random-at (classmethod (fn [self door dir room-width room-height]
     (setv this-width (apply randint room-width))
     (setv this-height (apply randint room-height))
     (setv p1 (+ door (if (in dir [Pos.WEST Pos.EAST])
@@ -164,10 +163,10 @@
       (Pos
         (- (randint 0 (dec this-width)))
         (min 1 (* dir.y this-height))))))
-    (kwc self p1 (+ p1 (Pos (dec this-width) (dec this-height)))
-      :door door)))]
+    (self p1 (+ p1 (Pos (dec this-width) (dec this-height)))
+      :door door)))
 
-  [create-random-centered-at (classmethod (fn [self center room-width room-height]
+  create-random-centered-at (classmethod (fn [self center room-width room-height]
     (setv this-width (apply randint room-width))
     (setv this-height (apply randint room-height))
     (setv p1 (Pos
@@ -176,27 +175,27 @@
     (setv p2 (Pos
       (+ p1.x this-width -1)
       (+ p1.y this-height -1)))
-    (self p1 p2)))]
+    (self p1 p2)))
 
-  [borders (fn [self]
-    (, (dec self.p1.x) (inc self.p2.x) (dec self.p1.y) (inc self.p2.y)))]
+  borders (fn [self]
+    (, (dec self.p1.x) (inc self.p2.x) (dec self.p1.y) (inc self.p2.y)))
 
-  [valid? (fn [self wall? diggable?]
+  valid? (fn [self wall? diggable?]
     (setv [left right top bottom] (self.borders))
     (all (lc [x (seq left right) y (seq top bottom)]
        (if (or (in x [left right]) (in y [top bottom]))
         (wall? (Pos x y))
-        (diggable? (Pos x y))))))]
+        (diggable? (Pos x y))))))
 
-  [dig-out (fn [self dig-f]
+  dig-out (fn [self dig-f]
     (setv [left right top bottom] (self.borders))
     (for [x (seq left right)]
       (for [y (seq top bottom)]
         (dig-f (Pos x y) (and
           (not-in (Pos x y) self.doors)
-          (or (in x [left right]) (in y [top bottom])))))))]
+          (or (in x [left right]) (in y [top bottom])))))))
 
-  [remake-doors (fn [self wall?]
+  remake-doors (fn [self wall?]
     (setv self.doors [])
     (setv [left right top bottom] (self.borders))
     (for [p (+
@@ -205,22 +204,21 @@
         (amap (Pos it top) (seq left right))
         (amap (Pos it bottom) (seq left right)))]
       (unless (wall? p)
-        (.append self.doors p))))]])
+        (.append self.doors p))))])
 
 ;; * Corridor
 
 (defclass Corridor [MapFeature] [
 
-  [__init__ (fn [self start end]
+  __init__ (fn [self start end]
     (set-self start end)
-    (setv self.ends-with-wall True)
-    None)]
+    (setv self.ends-with-wall True))
 
-  [create-random-at (classmethod (fn [self start dir corridor-length]
+  create-random-at (classmethod (fn [self start dir corridor-length]
     (setv length (apply randint corridor-length))
-    (self start (+ start (* length dir)))))]
+    (self start (+ start (* length dir)))))
 
-  [valid? (fn [self wall? diggable?]
+  valid? (fn [self wall? diggable?]
 
     (setv diff (- self.end self.start))
     (setv length (inc (max (abs diff.x) (abs diff.y))))
@@ -248,9 +246,9 @@
        (not (wall? tail))
        (and (wall? (+ tail near)) (wall? (- tail near))))
       ; Length-1 corridors must have a clear space after them.
-      (or (> length 1) (not (wall? tail)))))]
+      (or (> length 1) (not (wall? tail)))))
 
-  [dig-out (fn [self dig-f]
+  dig-out (fn [self dig-f]
     (setv diff (- self.end self.start))
     (setv dir (Pos (signum diff.x) (signum diff.y)))
     (setv p self.start)
@@ -258,4 +256,4 @@
       (dig-f p False)
       (when (= p self.end)
         (break))
-      (+= p dir)))]])
+      (+= p dir)))])

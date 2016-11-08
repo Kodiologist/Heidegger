@@ -1,10 +1,8 @@
-(require kodhy.macros)
-
-(import heidegger.digger ansicolor random)
+(import heidegger.digger random)
 
 (random.seed 100)
 
-(def result (kwc heidegger.digger.generate-map
+(def result (heidegger.digger.generate-map
   :width 60 :height 18
   :room-width [3 7] :room-height [3 5]
   :corridor-length [3 10]
@@ -19,10 +17,10 @@
 (for [y (range (len (first gmap)))]
   (for [x (range (len gmap))]
     (setv val (get gmap x y))
-    (kwc print :sep "" :end "" (cond
+    (print :sep "" :end "" (cond
       [(is val False) "."]
-      [(is val True) (kwc ansicolor.black " " :+reverse)]
-      [(= val :door) (kwc ansicolor.yellow "#")]
+      [(is val True) " "] ;(ansicolor.black " " :reverse True)]
+      [(= val :door) "#"] ;(ansicolor.yellow "#")]
       [True (raise ValueError)])))
   (print))
 
