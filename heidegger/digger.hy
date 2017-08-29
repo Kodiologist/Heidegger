@@ -154,8 +154,8 @@
       (.append self.doors door)))
 
   create-random-at (classmethod (fn [self door dir room-width room-height]
-    (setv this-width (apply randint room-width))
-    (setv this-height (apply randint room-height))
+    (setv this-width (randint #* room-width))
+    (setv this-height (randint #* room-height))
     (setv p1 (+ door (if (in dir [Pos.WEST Pos.EAST])
       (Pos
         (min 1 (* dir.x this-width))
@@ -167,8 +167,8 @@
       :door door)))
 
   create-random-centered-at (classmethod (fn [self center room-width room-height]
-    (setv this-width (apply randint room-width))
-    (setv this-height (apply randint room-height))
+    (setv this-width (randint #* room-width))
+    (setv this-height (randint #* room-height))
     (setv p1 (Pos
       (- center.x (randint 0 (dec this-width)))
       (- center.y (randint 0 (dec this-height)))))
@@ -215,7 +215,7 @@
     (setv self.ends-with-wall True))
 
   create-random-at (classmethod (fn [self start dir corridor-length]
-    (setv length (apply randint corridor-length))
+    (setv length (randint #* corridor-length))
     (self start (+ start (* length dir)))))
 
   valid? (fn [self wall? diggable?]
